@@ -30,6 +30,7 @@ class Bandit:
 def experiment():
   bandits = [Bandit(p) for p in BANDIT_PROBABILITIES]
 
+  eps = 1
   rewards = np.zeros(NUM_TRIALS)
   num_times_explored = 0
   num_times_exploited = 0
@@ -38,9 +39,11 @@ def experiment():
   print("optimal j:", optimal_j)
 
   for i in range(NUM_TRIALS):
+    # decaying epsilon so that the optimal bandit is used more often
+    eps = EPS*(0.99)**i
 
     # use epsilon-greedy to select the next bandit
-    if np.random.random() < EPS:
+    if np.random.random() < eps:
       num_times_explored += 1
       j = np.random.randint(0,len(bandits))
     else:
